@@ -14,7 +14,11 @@
     "content_scripts": [
       {
         "matches": ["*://meet.google.com/*"],
-        "js": ["contentScript.js"]
+        "js": ["contentScript.js"] ,
+        "css": [
+            "style.css"
+        ],
+        "run_at": "document_start"
       }
     ],
     "icons": {

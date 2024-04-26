@@ -1,0 +1,18 @@
+.content {
+    background-color: hotpink;
+    height: 50px;
+    width: 100px;
+    font-size: 30px;
+}
+.special_class_name {
+    background-color: hotpink;
+    height: 50px;
+    width: 100%;
+    font-size: 30px;
+    position: absolute;
+    top: 10%;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

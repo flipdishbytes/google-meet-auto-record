@@ -1,5 +1,7 @@
 var recording_started = false;
 
+var divMessage = "🔴 Recording starting soon. Click here to cancel.";
+
 function startRecording() {
     return new Promise((resolve, reject) => {
         console.log('startRecording() entered.');
@@ -12,15 +14,15 @@ function startRecording() {
                     let isStarted = clickSpanByText('Start');
                     if(isStarted){
                         console.log('Recording started');
-                        clickDivByText("Don't forget to record!");
+                        clickDivByText(divMessage);
                         recording_started = true;
                         resolve(true);
                     } else {
                         reject('Failed to start recording');
                     }
                 }, 1000);
-            }, 1000);
-        }, 1000);
+            }, 600);
+        }, 400);
         console.log('startRecording() exit.');
     });
 }
@@ -105,15 +107,35 @@ function divExists(text) {
 }
 
 
+/* Warning DIV setup */
+
+function createNode() {
+    let newDiv = document.createElement('div');
+    newDiv.textContent = divMessage;
+    newDiv.className = "special_class_name"
+    newDiv.onclick = function() {
+        this.style.display = "none";
+    }
+    return newDiv;
+}
+function setUpDiv() {
+    const maindiv = document.getElementsByTagName("body")[0].getElementsByTagName('div')[0];
+    const newNode = createNode();
+    maindiv.prepend(newNode);
+}
+/*  */
+
+document.addEventListener('DOMContentLoaded', setUpDiv, false)
+
 window.addEventListener('load', () => {    
     console.log('Page loaded');
-
+   
     
     const interval = setInterval(() => {
         console.log('recording_started = ' + recording_started);
 
 
-        let record_message_exists = divExists("Don't forget to record!");
+        let record_message_exists = divExists(divMessage);
 
         console.log('record_message_exists = ' + record_message_exists);
         console.log(record_message_exists && !recording_started);
