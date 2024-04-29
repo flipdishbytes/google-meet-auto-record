@@ -5,16 +5,17 @@ var divMessage = "🔴 Recording starting soon. Click here to cancel.";
 function startRecording() {
     return new Promise((resolve, reject) => {
         console.log('startRecording() entered.');
-        clickElementWithText('more_vert');
+        clickGoogleMaterialIconElementWithText('more_vert');
         setTimeout(() => {  
-            clickSpanByText('Manage recording');
+            clickElementByText('span','Manage recording');
             setTimeout(() => {  
-                clickSpanByText('Start recording');
+                clickElementByText('label','Also start a transcript (English only)');
+                clickElementByText('span','Start recording');
                 setTimeout(() => {  
-                    let isStarted = clickSpanByText('Start');
+                    let isStarted = clickElementByText('span','Start');
                     if(isStarted){
                         console.log('Recording started');
-                        clickDivByText(divMessage);
+                        clickElementByText('div',divMessage);
                         recording_started = true;
                         resolve(true);
                     } else {
@@ -28,7 +29,7 @@ function startRecording() {
 }
 
 
-function clickElementWithText(text){
+function clickGoogleMaterialIconElementWithText(text){
     const icons = document.querySelectorAll('i.google-material-icons[aria-hidden="true"]');
     
     // Loop through the collection of icons in reverse order as the multiple buttons often exist and we generally want the last one.
@@ -47,27 +48,9 @@ function clickElementWithText(text){
 }
 
 
-// Function to find and click the span with specific text content
-function clickSpanByText(text) {
-    // Retrieve all span elements in the document
-    const spans = document.querySelectorAll('span');
 
-    // Loop through each span to find the one with the matching text content
-    for (let span of spans) {
-        if (span.textContent.trim() === text) {
-            span.click();  // Click the span if the text matches
-            console.log('Clicked span with text:', text);
-            return true;
-        }
-    }
-
-    // Log if the span was not found
-    console.log('Span with text "' + text + '" not found');
-    return false;
-}
-
-function clickDivByText(text) {
-    const spans = document.querySelectorAll('div');
+function clickElementByText(elementType, text) {
+    const spans = document.querySelectorAll(elementType);
 
     // Loop through each span to find the one with the matching text content
     for (let span of spans) {
@@ -82,6 +65,7 @@ function clickDivByText(text) {
     console.log('Div with text "' + text + '" not found');
     return false;
 }
+
 
 
 function divExists(text) {
@@ -104,6 +88,13 @@ function divExists(text) {
 
     console.log('divExists() exit. Returning false');    
     return false;
+}
+
+
+function onWaitingScreen() {
+    console.log('onWaitingScreen() entered');
+    
+    return divExists('Ready to join?');
 }
 
 
@@ -136,11 +127,12 @@ window.addEventListener('load', () => {
 
 
         let record_message_exists = divExists(divMessage);
-
+        let isOnWaitingScreen = onWaitingScreen();
+        console.log('isOnWaitingScreen = ' + isOnWaitingScreen);
         console.log('record_message_exists = ' + record_message_exists);
         console.log(record_message_exists && !recording_started);
 
-        if (record_message_exists && !recording_started) {
+        if (record_message_exists && !recording_started && !isOnWaitingScreen) {
             startRecording().then(started => {
                 console.log('Recording has started');
                 clearInterval(interval);
