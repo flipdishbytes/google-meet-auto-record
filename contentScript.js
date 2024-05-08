@@ -171,7 +171,7 @@ function remind_button_clicked() {
         shouldRecordNow = true;
         
         
-    }, 1000 * 10);
+    }, 1000 * 180);
 }
 
 
