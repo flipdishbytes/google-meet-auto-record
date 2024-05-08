@@ -90,11 +90,33 @@ function divExists(text) {
     return false;
 }
 
+function spanExists(text) {
+    console.log('spanExists() entered');
+    const spans = document.querySelectorAll('span');
+
+    for (let span of spans) {
+        if (span.textContent.trim() === text) {            
+            console.log('span exists.');
+            
+            if(span.style.display !== 'none'){
+                console.log('span is visible.');
+
+                console.log('spanExists() exit. Returning true');    
+                return true;
+            }
+            
+        }
+    }
+
+    console.log('spanExists() exit. Returning false');    
+    return false;
+}
+
 
 function onWaitingScreen() {
     console.log('onWaitingScreen() entered');
     
-    return divExists('Ready to join?');
+    return spanExists('Join now');
 }
 
 
