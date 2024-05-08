@@ -1,6 +1,14 @@
 var recording_started = false;
+var shouldRecordNow = true;
 
-var divMessage = "🔴 Recording starting soon. Click here to cancel.";
+var divMessage = `
+<span class="pulsate-container">
+    <span class="pulsate">🔴</span>
+</span>&nbsp; Recording starting soon.&nbsp;&nbsp;&nbsp;
+<input type="button" class="contained-button" id="remind_button" value="Remind me in a few minutes" />
+&nbsp;
+<input type="button" class="text-button" id="cancel_button" value="Don't record this call" />    
+`;
 
 function startRecording() {
     return new Promise((resolve, reject) => {
@@ -15,7 +23,7 @@ function startRecording() {
                     let isStarted = clickElementByText('span','Start');
                     if(isStarted){
                         console.log('Recording started');
-                        clickElementByText('div',divMessage);
+                        hideMessageDiv();
                         recording_started = true;
                         resolve(true);
                     } else {
@@ -47,8 +55,6 @@ function clickGoogleMaterialIconElementWithText(text){
     return false;
 }
 
-
-
 function clickElementByText(elementType, text) {
     const spans = document.querySelectorAll(elementType);
 
@@ -65,7 +71,6 @@ function clickElementByText(elementType, text) {
     console.log('Div with text "' + text + '" not found');
     return false;
 }
-
 
 
 function divExists(text) {
@@ -125,17 +130,51 @@ function onWaitingScreen() {
 function createNode() {
     let newDiv = document.createElement('div');
     newDiv.textContent = divMessage;
-    newDiv.className = "special_class_name"
-    newDiv.onclick = function() {
-        this.style.display = "none";
-    }
+
+    newDiv.innerHTML = divMessage;
+
+    newDiv.className = "message_div material-paper"
+    newDiv.id = "message_div";
     return newDiv;
 }
+
+
+
+
+
 function setUpDiv() {
     const maindiv = document.getElementsByTagName("body")[0].getElementsByTagName('div')[0];
     const newNode = createNode();
     maindiv.prepend(newNode);
+
+    document.getElementById('cancel_button').addEventListener('click', cancel_button_clicked);
+    document.getElementById('remind_button').addEventListener('click', remind_button_clicked);
 }
+
+function hideMessageDiv() {
+    document.getElementById('message_div').style.display = 'none';
+}
+function cancel_button_clicked() {
+    console.log('Cancel button clicked');
+    hideMessageDiv();
+    shouldRecordNow = false;
+    
+}
+function remind_button_clicked() {
+    console.log('Remind button clicked');
+    hideMessageDiv();
+    shouldRecordNow = false;
+    setTimeout(() => {  
+        console.log('Re-showing div');
+       
+        document.getElementById('message_div').style.display = 'flex';
+        shouldRecordNow = true;
+        
+        
+    }, 1000 * 10);
+}
+
+
 /*  */
 
 document.addEventListener('DOMContentLoaded', setUpDiv, false)
@@ -148,19 +187,19 @@ window.addEventListener('load', () => {
         console.log('recording_started = ' + recording_started);
 
 
-        let record_message_exists = divExists(divMessage);
+       
         let isOnWaitingScreen = onWaitingScreen();
         console.log('isOnWaitingScreen = ' + isOnWaitingScreen);
-        console.log('record_message_exists = ' + record_message_exists);
-        console.log(record_message_exists && !recording_started);
+        console.log('shouldRecordNow = ' + shouldRecordNow);
+        console.log(shouldRecordNow && !recording_started);
 
-        if (record_message_exists && !recording_started && !isOnWaitingScreen) {
+        if (shouldRecordNow && !recording_started && !isOnWaitingScreen) {
             startRecording().then(started => {
-                console.log('Recording has started');
+                console.log('Recording has started');                
                 clearInterval(interval);
             }).catch(error => {
                 console.log('Error starting recording:', error);
             });
         }
-    }, 10000);
+    }, 8 * 1000);
 });
