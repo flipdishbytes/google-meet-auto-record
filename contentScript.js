@@ -1,4 +1,3 @@
-var recording_started = false;
 var shouldRecordNow = true;
 
 var divMessage = `
@@ -25,7 +24,7 @@ function startRecording() {
                     if(isStarted){
                         console.log('Recording started');
                         hideMessageDiv();
-                        recording_started = true;
+                        
                         resolve(true);
                     } else {
                         reject('Failed to start recording');
@@ -140,7 +139,21 @@ function createNode() {
 }
 
 
+function isRecording(){
+    console.log('isRecording() entered');
+    const divs = document.querySelectorAll('div');
 
+    for (let div of divs) {
+        if (div.getAttribute('aria-label') === 'This meeting is being recorded'
+                && div.style.display !== 'none') {            
+                    console.log('isRecording() exit. Returning true');                     
+                return true;                    
+        }
+    }
+
+    console.log('isRecording() exit. Returning false');    
+    return false;
+}
 
 
 function setUpDiv() {
@@ -148,6 +161,7 @@ function setUpDiv() {
     const newNode = createNode();
     maindiv.prepend(newNode);
 
+   // document.getElementById('cancel_button').addEventListener('click', cancel_button_clicked);
     document.getElementById('cancel_button').addEventListener('click', cancel_button_clicked);
     document.getElementById('remind_button').addEventListener('click', remind_button_clicked);
 }
@@ -186,8 +200,15 @@ window.addEventListener('load', () => {
    
     
     const interval = setInterval(() => {
+        var recording_started = isRecording();
         console.log('recording_started = ' + recording_started);
 
+        if(recording_started){
+
+            hideMessageDiv();
+            clearInterval(interval);
+            return;
+        }
 
        
         let isOnWaitingScreen = onWaitingScreen();
