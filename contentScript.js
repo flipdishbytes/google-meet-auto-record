@@ -8,6 +8,7 @@ var divMessage = `
 <input type="button" class="contained-button" id="remind_button" value="Remind me in a few minutes" />
 &nbsp;
 <input type="button" class="text-button" id="cancel_button" value="Don't record this call" />    
+<span class="gmar_feedback"><a target="blank" href="https://docs.google.com/forms/d/e/1FAIpQLSeP-tkkIEhBZLgbB6zqE5saXULplaXin_uWR6XKR7YvIMzuvA/viewform">Feedback</a></span>
 `;
 
 function startRecording() {
@@ -152,6 +153,7 @@ function setUpDiv() {
 }
 
 function hideMessageDiv() {
+    console.log('hideMessageDiv() entered');
     document.getElementById('message_div').style.display = 'none';
 }
 function cancel_button_clicked() {

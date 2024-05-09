@@ -26,6 +26,19 @@
     
 }
 
+.gmar_feedback
+{
+    color: #bbb7b7;
+    font-family: 'Roboto', sans-serif;
+    
+    float: right;
+    position: absolute; right: 10px; bottom: 5px;
+
+}
+.gmar_feedback a
+{
+    color: #bbb7b7;
+}
 
 .text-button {
     background: none;
