@@ -181,11 +181,12 @@ function remind_button_clicked() {
     hideMessageDiv();
     shouldRecordNow = false;
     setTimeout(() => {  
-        console.log('Re-showing div');
-       
-        document.getElementById('message_div').style.display = 'flex';
-        shouldRecordNow = true;
-        
+        console.log('Maybe Re-showing div');
+        if(!isRecording()){
+            console.log('Re-showing div');
+            document.getElementById('message_div').style.display = 'flex';
+            shouldRecordNow = true;            
+        }        
         
     }, 1000 * 180);
 }
