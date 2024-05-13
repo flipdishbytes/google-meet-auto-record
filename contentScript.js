@@ -1,4 +1,4 @@
-var shouldRecordNow = true;
+
 
 var divMessage = `
 <span class="pulsate-container">
@@ -9,6 +9,17 @@ var divMessage = `
 <input type="button" class="text-button" id="cancel_button" value="Don't record this call" />    
 <span class="gmar_feedback"><a target="blank" href="https://docs.google.com/forms/d/e/1FAIpQLSeP-tkkIEhBZLgbB6zqE5saXULplaXin_uWR6XKR7YvIMzuvA/viewform">Feedback</a></span>
 `;
+
+function init(){
+    console.log('init()');
+    if (typeof shouldRecordNow === 'undefined') {
+        console.log('init(): shouldRecordNow is undefined. Setting to false');
+        shouldRecordNow = true;
+    }
+    else{
+        console.log('init(): shouldRecordNow is defined. Value = ' + shouldRecordNow);
+    }
+}
 
 function startRecording() {
     return new Promise((resolve, reject) => {
@@ -193,7 +204,7 @@ function remind_button_clicked() {
 
 
 /*  */
-
+init();
 document.addEventListener('DOMContentLoaded', setUpDiv, false)
 
 window.addEventListener('load', () => {    
